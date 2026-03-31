@@ -302,6 +302,16 @@
       display: block;
       transition: transform .6s;
     }
+    .portfolio-item video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .portfolio-item:has(video) {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
     .portfolio-item:hover img,
     .portfolio-item:hover video { transform: scale(1.04); }
     .portfolio-item-label { display: none; }
