@@ -274,11 +274,12 @@
     .tab-pane.active { display: block; }
 
     /* ── PORTFOLIO ── */
-    #portfolio { background: var(--white); }
+    #portfolio { background: var(--white); overflow: hidden; }
     .portfolio-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 2px;
+      width: 100%;
     }
     .portfolio-item {
       position: relative;
@@ -286,14 +287,13 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
     }
     .portfolio-item-img {
       aspect-ratio: 3/4;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
+      width: 100%;
     }
     .portfolio-item img,
     .portfolio-item video {
@@ -610,12 +610,12 @@
       .nav-links.open a { color: var(--white); font-size: 1rem; }
       .nav-toggle { display: flex; z-index: 101; }
       .portfolio-grid {
-        grid-template-columns: 1fr;
-        max-width: 402px;
-        margin-left: auto;
-        margin-right: auto;
+        grid-template-columns: repeat(2, 1fr);
         width: 100%;
       }
+      #portfolio { padding-left: 0; padding-right: 0; }
+      #portfolio .section-header { padding: 0 5%; }
+      .portfolio-tabs { padding: 0 5%; }
       .services-panel { padding: 3rem 2rem; }
       section { padding: 4rem 5%; }
       #services { padding: 2rem 5%; }
