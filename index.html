@@ -773,22 +773,22 @@
     <div class="tab-pane" id="tab-videos">
       <div class="portfolio-grid">
         <div class="portfolio-item reveal">
-          <video src="Video/video1.mp4" muted loop playsinline preload="metadata"></video>
+          <video src="Video/video1.mp4#t=0.001" muted loop playsinline preload="auto"></video>
           <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
           <div class="portfolio-overlay"><span>Session Reel</span></div>
         </div>
         <div class="portfolio-item reveal reveal-delay-1">
-          <video src="Video/video2.mp4" muted loop playsinline preload="metadata"></video>
+          <video src="Video/video2.mp4#t=0.001" muted loop playsinline preload="auto"></video>
           <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
           <div class="portfolio-overlay"><span>Transformation</span></div>
         </div>
         <div class="portfolio-item reveal reveal-delay-2">
-          <video src="Video/video3.mp4" muted loop playsinline preload="metadata"></video>
+          <video src="Video/video3.mp4#t=0.001" muted loop playsinline preload="auto"></video>
           <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
           <div class="portfolio-overlay"><span>Glam Session</span></div>
         </div>
         <div class="portfolio-item reveal">
-          <video src="Video/video4.mp4" muted loop playsinline preload="metadata"></video>
+          <video src="Video/video4.mp4#t=0.001" muted loop playsinline preload="auto"></video>
           <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
           <div class="portfolio-overlay"><span>Bridal Reel</span></div>
         </div>
@@ -955,7 +955,7 @@
       if (!item || !item.querySelector('video')) return;
       if (e.target.id === 'video-close') return;
       if (window.innerWidth <= 900) {
-        const src = item.querySelector('video').src;
+        const src = item.querySelector('video').src.replace('#t=0.001', '');
         openVideoOverlay(src);
       } else {
         toggleVideo(item);
