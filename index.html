@@ -137,6 +137,8 @@
       position: relative;
       z-index: 2;
       width: 100%;
+      max-width: 100%;
+      overflow: hidden;
       text-align: center;
       padding: 0;
       opacity: 0;
@@ -547,6 +549,42 @@
     }
     .btn-submit:hover { background: #fff; color: #000; border-color: #fff; }
 
+    /* ── VIDEO FULLSCREEN OVERLAY ── */
+    #video-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #video-overlay.open { display: flex; }
+    #video-overlay video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    #video-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10000;
+      backdrop-filter: blur(8px);
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--black);
@@ -625,11 +663,14 @@
       .contact-link-value { font-size: .9rem; }
       .hero-title {
         white-space: normal !important;
-        font-size: 18vw !important;
+        font-size: 16vw !important;
         line-height: .92;
         text-align: center;
         width: 100%;
-        padding: 0 2%;
+        max-width: 100vw;
+        overflow: hidden;
+        padding: 0;
+        word-break: break-word;
       }
       .contact-headline { font-size: clamp(2rem, 10vw, 3.5rem); }
     }
@@ -811,6 +852,12 @@
 
   </section>
 
+  <!-- VIDEO FULLSCREEN OVERLAY -->
+  <div id="video-overlay">
+    <button id="video-close" onclick="closeVideoOverlay()">&#x2715;</button>
+    <video id="overlay-video" playsinline controls></video>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div style="width:40px;height:1px;background:rgba(255,255,255,.2);margin:0 auto 1.2rem;"></div>
@@ -856,7 +903,38 @@
     setTimeout(fitHeroTitle, 300);
     window.addEventListener('resize', fitHeroTitle);
 
-    // Video play/pause toggle
+    // Open fullscreen overlay for mobile, play inline on desktop
+    function openVideoOverlay(src) {
+      const overlay = document.getElementById('video-overlay');
+      const vid = document.getElementById('overlay-video');
+      vid.src = src;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      vid.play().catch(() => {});
+    }
+
+    function closeVideoOverlay() {
+      const overlay = document.getElementById('video-overlay');
+      const vid = document.getElementById('overlay-video');
+      vid.pause();
+      vid.src = '';
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close on backdrop tap
+    document.getElementById('video-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeVideoOverlay();
+    });
+
+    // Swipe down to close
+    let touchStartY = 0;
+    document.getElementById('video-overlay').addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; });
+    document.getElementById('video-overlay').addEventListener('touchend', e => {
+      if (e.changedTouches[0].clientY - touchStartY > 80) closeVideoOverlay();
+    });
+
+    // Video play/pause toggle (desktop inline)
     function toggleVideo(el) {
       const item = el.closest('.portfolio-item');
       const video = item.querySelector('video');
@@ -869,10 +947,16 @@
         btn.style.display = 'flex';
       }
     }
+
     // Make entire video card clickable
     document.addEventListener('click', function(e) {
       const item = e.target.closest('.portfolio-item');
-      if (item && item.querySelector('video')) {
+      if (!item || !item.querySelector('video')) return;
+      if (e.target.id === 'video-close') return;
+      if (window.innerWidth <= 900) {
+        const src = item.querySelector('video').src;
+        openVideoOverlay(src);
+      } else {
         toggleVideo(item);
       }
     });
