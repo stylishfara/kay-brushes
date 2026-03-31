@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kay Brushes — Enhancing Beauty, One Stroke at a Time</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Termina';
+      src: url('Termina-Black.otf') format('opentype');
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: 'LT Cushion';
+      src: url('font/LTCushion-Black.ttf') format('truetype');
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: 'LT Cushion';
+      src: url('font/LTCushion-Bold.ttf') format('truetype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'LT Cushion';
+      src: url('font/LTCushion-Medium.ttf') format('truetype');
+      font-weight: 500;
+    }
+    @font-face {
+      font-family: 'LT Cushion';
+      src: url('font/LTCushion-Light.ttf') format('truetype');
+      font-weight: 300;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --nude:    #2a2a2a;
+      --beige:   #1e1e1e;
+      --blush:   #888888;
+      --blush-light: #2e2e2e;
+      --cream:   #141414;
+      --black:   #0a0a0a;
+      --charcoal:#d0d0d0;
+      --muted:   #666666;
+      --white:   #ffffff;
+      --serif:   'LT Cushion', Georgia, serif;
+      --sans:    'Geist', system-ui, sans-serif;
+      --radius:  12px;
+      --shadow:  0 8px 32px rgba(0,0,0,.4);
+      --shadow-hover: 0 16px 48px rgba(0,0,0,.6);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .75rem 5%;
+      transition: background .4s, backdrop-filter .4s;
+    }
+    nav.scrolled {
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 2px 20px rgba(0,0,0,.08);
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+    .nav-logo img {
+      height: 180px;
+      width: auto;
+      display: block;
+      transition: height .4s, opacity .3s;
+    }
+    nav.scrolled .nav-logo img {
+      height: 60px;
+    }
+    .nav-logo:hover img { opacity: .8; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    nav.scrolled .nav-links a { color: #1a1a1a; }
+    .nav-links a:hover { color: var(--blush); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-toggle span { width: 24px; height: 1.5px; background: var(--white); transition: background .3s; }
+    nav.scrolled .nav-toggle span { background: #1a1a1a; }
+    nav.scrolled .nav-book-btn { background: #000 !important; color: #fff !important; border-color: #000 !important; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(212,169,154,.18) 0%, transparent 60%),
+        linear-gradient(0deg, rgba(26,26,24,.65) 0%, rgba(26,26,24,.3) 60%, rgba(26,26,24,.55) 100%),
+        url('images/hero3.jpg') center/cover no-repeat;
+      transform: scale(1.04);
+      transition: transform 8s ease-out;
+    }
+    #hero.loaded .hero-bg { transform: scale(1); }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      text-align: center;
+      padding: 0;
+      opacity: 0;
+      transform: translateY(28px);
+      animation: fadeUp .9s .35s forwards;
+    }
+    .hero-eyebrow {
+      font-size: .75rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+      margin-bottom: .6rem;
+    }
+    .hero-title {
+      font-family: 'Termina', var(--sans);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      color: var(--white);
+      line-height: .95;
+      margin-bottom: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-sub {
+      font-size: clamp(.85rem, 1.5vw, 1rem);
+      font-weight: 600;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.6);
+      text-transform: uppercase;
+      margin-top: 1.2rem;
+      padding-bottom: calc(6rem - 40px);
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: .82rem 2.2rem;
+      font-family: var(--sans);
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all .3s;
+    }
+    .btn-primary {
+      background: var(--blush);
+      color: var(--white);
+      border: 1.5px solid var(--blush);
+    }
+    .btn-primary:hover { background: transparent; color: var(--white); }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,.5);
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      color: rgba(255,255,255,.5);
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      animation: bounce 2.5s infinite;
+    }
+    .hero-scroll::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 5%; }
+    .section-label {
+      font-size: .72rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-bottom: .75rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 300;
+      color: var(--black);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 460px;
+      line-height: 1.8;
+    }
+    .section-header { margin-bottom: 3.5rem; }
+    .section-header.centered { text-align: center; }
+    .section-header.centered .section-sub { margin: 0 auto; }
+
+    /* ── PORTFOLIO TABS ── */
+    .portfolio-tabs {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: 4rem;
+    }
+    .tab-btn {
+      font-family: var(--sans);
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .6rem 2rem;
+      border-radius: 50px;
+      border: 1.5px solid transparent;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      transition: all .25s;
+    }
+    .tab-btn.active {
+      background: transparent;
+      color: #111;
+      border-color: #111;
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { background: var(--white); }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .portfolio-item {
+      position: relative;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .portfolio-item-img {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .portfolio-item img,
+    .portfolio-item video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s;
+    }
+    .portfolio-item:hover img,
+    .portfolio-item:hover video { transform: scale(1.04); }
+    .portfolio-item-label { display: none; }
+    .portfolio-overlay { display: none; }
+    .play-icon {
+      position: absolute;
+      top: 45%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255,255,255,.6);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .3s;
+      z-index: 2;
+    }
+    .play-icon svg { fill: white; margin-left: 3px; }
+    .portfolio-item:hover .play-icon { background: rgba(0,0,0,.6); }
+
+    /* ── SERVICES ── */
+    #services {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 5%;
+      overflow: hidden;
+    }
+    #services::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('images/hero2.jpg') center/cover no-repeat;
+      transform: scale(1.05);
+      z-index: 0;
+    }
+    .services-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(10,10,10,.88);
+      border-radius: 18px;
+      padding: 3.5rem 4rem;
+      width: 100%;
+      max-width: 780px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+    .services-heading {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid #444;
+      padding-bottom: 1.8rem;
+      text-align: center;
+    }
+    .services-heading h2 {
+      font-family: 'LT Cushion', var(--serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .services-rows { }
+    .svc-row {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid #2a2a2a;
+      cursor: default;
+    }
+    .svc-row:last-child { border-bottom: none; }
+    .svc-num {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: #555;
+      padding-top: .4rem;
+    }
+    .svc-body { }
+    .svc-name {
+      font-family: 'LT Cushion', var(--serif);
+      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: .02em;
+      display: block;
+    }
+    .svc-desc {
+      font-size: .82rem;
+      color: #888;
+      line-height: 1.7;
+      margin-top: .4rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: #0a0a0a;
+      padding: 8rem 5%;
+      text-align: center;
+    }
+    .contact-headline {
+      font-family: 'Termina', var(--sans);
+      font-size: clamp(2.8rem, 8vw, 7rem);
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      line-height: .95;
+      margin-bottom: 4rem;
+    }
+    .contact-headline em {
+      display: inline-block;
+      position: relative;
+      font-style: italic;
+      font-family: 'LT Cushion', var(--serif);
+      font-weight: 300;
+      color: var(--blush);
+      text-transform: none;
+      font-size: 1.1em;
+    }
+    @keyframes sparkle-pulse {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+    @keyframes sparkle-drift {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(45deg); }
+      50% { opacity: .8; transform: scale(1) rotate(225deg); }
+    }
+    .sparkle {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+    .sparkle::before, .sparkle::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--blush);
+      clip-path: polygon(50% 0%, 55% 45%, 100% 50%, 55% 55%, 50% 100%, 45% 55%, 0% 50%, 45% 45%);
+    }
+    .sparkle::after {
+      transform: rotate(45deg);
+      opacity: .6;
+    }
+    .sparkle-1 { top: -14px; left: -22px; animation: sparkle-pulse 2.4s 0s ease-in-out infinite; }
+    .sparkle-2 { top: -8px;  right: -18px; width: 12px; height: 12px; animation: sparkle-drift 2.8s .6s ease-in-out infinite; }
+    .sparkle-3 { bottom: -10px; left: 10%; width: 10px; height: 10px; animation: sparkle-pulse 3.2s 1s ease-in-out infinite; }
+    .sparkle-4 { bottom: -6px;  right: 8%; width: 14px; height: 14px; animation: sparkle-drift 2.6s 1.4s ease-in-out infinite; }
+    .sparkle-5 { top: 40%; left: -28px; width: 8px; height: 8px; animation: sparkle-pulse 3.6s .3s ease-in-out infinite; }
+    .sparkle-6 { top: -18px; left: 30%; width: 10px; height: 10px; animation: sparkle-drift 2.2s .8s ease-in-out infinite; }
+    .sparkle-7 { bottom: 20%; right: -24px; width: 12px; height: 12px; animation: sparkle-pulse 3s 1.7s ease-in-out infinite; }
+    .sparkle-8 { top: 60%; right: -20px; width: 8px; height: 8px; animation: sparkle-drift 2.9s .4s ease-in-out infinite; }
+    .contact-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+      margin-bottom: 5rem;
+    }
+    .contact-link-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      text-decoration: none;
+    }
+    .contact-link-label {
+      font-size: .65rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #555;
+    }
+    .contact-link-value {
+      font-size: 1rem;
+      color: #ccc;
+      transition: color .25s;
+    }
+    .contact-link-item:hover .contact-link-value { color: var(--blush); }
+    .contact-divider { width: 1px; height: 44px; background: #2a2a2a; }
+    .contact-form-wrap {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label {
+      font-size: .68rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #555;
+    }
+    .form-group input,
+    .form-group textarea {
+      font-family: var(--sans);
+      font-size: .92rem;
+      color: #fff;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #333;
+      padding: .75rem 0;
+      outline: none;
+      transition: border-color .25s;
+      resize: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #444; }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: #888; }
+    .form-group textarea { min-height: 110px; }
+    .btn-submit {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #444;
+      padding: .88rem 2.6rem;
+      border-radius: 50px;
+      font-family: var(--sans);
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: .5rem;
+      transition: border-color .3s, color .3s, background .3s;
+    }
+    .btn-submit:hover { background: #fff; color: #000; border-color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      color: rgba(255,255,255,.45);
+      text-align: center;
+      padding: 2.5rem 5%;
+      font-size: .78rem;
+      letter-spacing: .08em;
+    }
+    footer .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: .2em;
+      display: block;
+      margin-bottom: .6rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .7s, transform .7s;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+      .portfolio-item:nth-child(2),
+      .portfolio-item:nth-child(5) { margin-top: 0; aspect-ratio: 4/5; }
+      .services-layout { grid-template-columns: 1fr; }
+      .services-image { min-height: 50vh; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 1.1rem 5%; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        background: rgba(26,26,24,.97);
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        z-index: 99;
+      }
+      .nav-links.open a { color: var(--white); font-size: 1rem; }
+      .nav-toggle { display: flex; z-index: 101; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .services-panel { padding: 3rem 2rem; }
+      section { padding: 4rem 5%; }
+      .contact-links { flex-direction: column; gap: 2rem; }
+      .contact-divider { width: 40px; height: 1px; }
+      .contact-link-value { font-size: .9rem; }
+      .hero-title {
+        white-space: normal;
+        font-size: 11vw !important;
+        line-height: .92;
+        text-align: center;
+        width: 100%;
+        padding: 0 4%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo"><img src="images/logo white.png" alt="Kay Brushes" /></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="btn btn-primary nav-book-btn" style="padding:.55rem 1.5rem;background:#fff;color:#000;border-color:#fff;">Book Now</a></li>
+    </ul>
+    <div class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">KAY BRUSHES</h1>
+      <p class="hero-sub">Enhancing Beauty, One Stroke at a Time</p>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="section-header centered reveal">
+      <h2 class="section-title" style="font-family:'LT Cushion',serif;font-weight:700;text-transform:uppercase;">Our Work</h2>
+      <p class="section-sub">A curated collection of transformations — each look crafted with intention and care.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="portfolio-tabs">
+      <button class="tab-btn active" onclick="switchTab('images')">Images</button>
+      <button class="tab-btn" onclick="switchTab('videos')">Videos</button>
+    </div>
+
+    <!-- Images Tab -->
+    <div class="tab-pane active" id="tab-images">
+      <div class="portfolio-grid">
+        <div class="portfolio-item reveal">
+          <div class="portfolio-item-img"><img src="website/girl.jpeg" alt="Glam Look" loading="lazy" /></div>
+          <div class="portfolio-item-label">Glam Look</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1">
+          <div class="portfolio-item-img"><img src="website/b1.jpeg" alt="Bridal" loading="lazy" /></div>
+          <div class="portfolio-item-label">Bridal</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2">
+          <div class="portfolio-item-img"><img src="website/b2.jpeg" alt="Bridal Glam" loading="lazy" /></div>
+          <div class="portfolio-item-label">Bridal Glam</div>
+        </div>
+        <div class="portfolio-item reveal">
+          <div class="portfolio-item-img"><img src="website/birthday girl.jpeg" alt="Birthday Glam" loading="lazy" /></div>
+          <div class="portfolio-item-label">Birthday Glam</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1">
+          <div class="portfolio-item-img"><img src="website/birthday girl 2.jpeg" alt="Birthday Look" loading="lazy" /></div>
+          <div class="portfolio-item-label">Birthday Look</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2">
+          <div class="portfolio-item-img"><img src="website/green.jpeg" alt="Elegant Look" loading="lazy" /></div>
+          <div class="portfolio-item-label">Elegant Look</div>
+        </div>
+        <div class="portfolio-item reveal">
+          <div class="portfolio-item-img"><img src="website/green2.jpeg" alt="Fresh Glam" loading="lazy" /></div>
+          <div class="portfolio-item-label">Fresh Glam</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1">
+          <div class="portfolio-item-img"><img src="website/okuku.jpeg" alt="Natural Beauty" loading="lazy" /></div>
+          <div class="portfolio-item-label">Natural Beauty</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2">
+          <div class="portfolio-item-img"><img src="website/okuku 2.jpeg" alt="Soft Glam" loading="lazy" /></div>
+          <div class="portfolio-item-label">Soft Glam</div>
+        </div>
+        <div class="portfolio-item reveal">
+          <div class="portfolio-item-img"><img src="website/okuku 3.jpeg" alt="Flawless Finish" loading="lazy" /></div>
+          <div class="portfolio-item-label">Flawless Finish</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1">
+          <div class="portfolio-item-img"><img src="website/sandra.jpeg" alt="Evening Glam" loading="lazy" /></div>
+          <div class="portfolio-item-label">Evening Glam</div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2">
+          <div class="portfolio-item-img"><img src="website/makeup-session.jpeg" alt="Makeup Session" loading="lazy" /></div>
+          <div class="portfolio-item-label">Makeup Session</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Videos Tab -->
+    <div class="tab-pane" id="tab-videos">
+      <div class="portfolio-grid">
+        <div class="portfolio-item reveal">
+          <video src="Video/video1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
+          <div class="portfolio-overlay"><span>Session Reel</span></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-1">
+          <video src="Video/video2.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
+          <div class="portfolio-overlay"><span>Transformation</span></div>
+        </div>
+        <div class="portfolio-item reveal reveal-delay-2">
+          <video src="Video/video3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
+          <div class="portfolio-overlay"><span>Glam Session</span></div>
+        </div>
+        <div class="portfolio-item reveal">
+          <video src="Video/video4.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-icon" onclick="toggleVideo(this)"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M2 1l11 7-11 7V1z" fill="white"/></svg></div>
+          <div class="portfolio-overlay"><span>Bridal Reel</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-card reveal">
+      <div class="services-heading">
+        <h2>Our Services</h2>
+      </div>
+      <div class="services-rows">
+        <div class="svc-row">
+          <span class="svc-num">01</span>
+          <div class="svc-body">
+            <span class="svc-name">Bridal Makeup</span>
+            <p class="svc-desc">Full-day glam from ceremony to reception. Includes a trial session, skin prep, and long-wear techniques tailored to your skin tone.</p>
+          </div>
+        </div>
+        <div class="svc-row">
+          <span class="svc-num">02</span>
+          <div class="svc-body">
+            <span class="svc-name">Medium Touch-Up</span>
+            <p class="svc-desc">Polished and refined — perfect for events, photoshoots, and special occasions with defined features and a flawless finish.</p>
+          </div>
+        </div>
+        <div class="svc-row">
+          <span class="svc-num">03</span>
+          <div class="svc-body">
+            <span class="svc-name">Light Touch-Up</span>
+            <p class="svc-desc">A fresh, effortless enhancement that elevates your natural beauty. Ideal for everyday wear and no-makeup makeup looks.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-headline reveal">
+      Get in Touch<br><em>Let's Create Magic.<span class="sparkle sparkle-1"></span><span class="sparkle sparkle-2"></span><span class="sparkle sparkle-3"></span><span class="sparkle sparkle-4"></span><span class="sparkle sparkle-5"></span><span class="sparkle sparkle-6"></span><span class="sparkle sparkle-7"></span><span class="sparkle sparkle-8"></span></em>
+    </div>
+
+    <div class="contact-links reveal">
+      <a href="mailto:ukpeborfavour2@gmail.com" class="contact-link-item">
+        <span class="contact-link-label">Email</span>
+        <span class="contact-link-value">ukpeborfavour2@gmail.com</span>
+      </a>
+      <div class="contact-divider"></div>
+      <a href="tel:+2347054765022" class="contact-link-item">
+        <span class="contact-link-label">Call / WhatsApp</span>
+        <span class="contact-link-value">+234 705 476 5022</span>
+      </a>
+      <div class="contact-divider"></div>
+      <a href="https://instagram.com/kays_brushes__" target="_blank" rel="noopener" class="contact-link-item">
+        <span class="contact-link-label">Instagram</span>
+        <span class="contact-link-value">@kays_brushes__</span>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="width:40px;height:1px;background:rgba(255,255,255,.2);margin:0 auto 1.2rem;"></div>
+    <p>&copy; 2026 Kay Brushes. All rights reserved.</p>
+  </footer>
+
+  <!-- Motion blur SVG filter -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <filter id="hblur" x="-30%" y="-5%" width="160%" height="110%">
+        <feGaussianBlur stdDeviation="20 0"/>
+      </filter>
+      <filter id="hblur-dim" x="-30%" y="-5%" width="160%" height="110%">
+        <feGaussianBlur stdDeviation="20 0"/>
+        <feColorMatrix type="matrix" values="0.10 0 0 0 0  0 0.10 0 0 0  0 0 0.10 0 0  0 0 0 1 0"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <script>
+    // Fit hero title to full width
+    function fitHeroTitle() {
+      const el = document.querySelector('.hero-title');
+      if (!el) return;
+      const targetWidth = document.documentElement.clientWidth * 0.88;
+      let lo = 10, hi = 600;
+      while (lo < hi - 1) {
+        const mid = Math.floor((lo + hi) / 2);
+        el.style.fontSize = mid + 'px';
+        if (el.getBoundingClientRect().width <= targetWidth) lo = mid;
+        else hi = mid;
+      }
+      el.style.fontSize = lo + 'px';
+    }
+    // Run immediately, after fonts load, and on resize
+    fitHeroTitle();
+    document.fonts.ready.then(() => { fitHeroTitle(); });
+    setTimeout(fitHeroTitle, 300);
+    window.addEventListener('resize', fitHeroTitle);
+
+    // Video play/pause toggle
+    function toggleVideo(el) {
+      const item = el.closest('.portfolio-item');
+      const video = item.querySelector('video');
+      const btn = item.querySelector('.play-icon');
+      if (!video) return;
+      if (video.paused) {
+        video.play().then(() => { btn.style.display = 'none'; }).catch(() => {});
+      } else {
+        video.pause();
+        btn.style.display = 'flex';
+      }
+    }
+    // Make entire video card clickable
+    document.addEventListener('click', function(e) {
+      const item = e.target.closest('.portfolio-item');
+      if (item && item.querySelector('video')) {
+        toggleVideo(item);
+      }
+    });
+
+    // Tab switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+    // Hero bg subtle ken-burns on load
+    window.addEventListener('load', () => {
+      document.getElementById('hero').classList.add('loaded');
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Form submit (demo)
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-submit');
+      btn.textContent = 'Message Sent ✓';
+      btn.style.background = '#25D366';
+      setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; e.target.reset(); }, 3000);
+    }
+  </script>
+</body>
+</html>
