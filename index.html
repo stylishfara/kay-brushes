@@ -53,7 +53,11 @@
       --shadow-hover: 0 16px 48px rgba(0,0,0,.6);
     }
 
-    html { scroll-behavior: smooth; }
+    html, body {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
 
     body {
       font-family: var(--sans);
@@ -604,17 +608,20 @@
       }
       .services-panel { padding: 3rem 2rem; }
       section { padding: 4rem 5%; }
+      #services { padding: 2rem 5%; }
+      .services-card { padding: 2rem 1.5rem; max-width: 100%; }
       .contact-links { flex-direction: column; gap: 2rem; }
       .contact-divider { width: 40px; height: 1px; }
       .contact-link-value { font-size: .9rem; }
       .hero-title {
-        white-space: normal;
-        font-size: 11vw !important;
+        white-space: normal !important;
+        font-size: 18vw !important;
         line-height: .92;
         text-align: center;
         width: 100%;
-        padding: 0 4%;
+        padding: 0 2%;
       }
+      .contact-headline { font-size: clamp(2rem, 10vw, 3.5rem); }
     }
   </style>
 </head>
@@ -814,10 +821,15 @@
   </svg>
 
   <script>
-    // Fit hero title to full width
+    // Fit hero title to full width (desktop only)
     function fitHeroTitle() {
       const el = document.querySelector('.hero-title');
       if (!el) return;
+      if (window.innerWidth <= 600) {
+        el.style.fontSize = '';
+        return;
+      }
+      el.style.whiteSpace = 'nowrap';
       const targetWidth = document.documentElement.clientWidth * 0.88;
       let lo = 10, hi = 600;
       while (lo < hi - 1) {
